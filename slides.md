@@ -418,14 +418,70 @@ type User = Readonly<{
 }>;
 ```
 
-- **なぜ必要**：TS の型はデフォルト mutable。引数として渡した値が呼び先で書き換わるバグが容易に発生 → **Readonly がデフォルト** の規約を型側で強制すれば `tsc` が落ちて検出できる。
-- 既存リポジトリ全体に手動適用は非現実的 → codemod 一発で適用。
+- **なぜ必要か** → 次スライドで具体例を見る。既存リポジトリ全体に手動適用は非現実的なので、codemod で一括変換する。
 
 ---
 
 <!-- _class: compact -->
 
-# 7.1 規模感と「LLM 効きにくさ」の正直な話
+# 7.1 なぜ Readonly を強制するのか？
+
+TypeScript の型は **デフォルト mutable**。渡した値が呼び先で書き換わると、**型と実体が乖離してランタイムバグになる**が、`tsc` は検出してくれない。
+
+<div class="two-col">
+
+<div>
+
+**❌ mutable — 型は通るが実行時に死ぬ**
+
+```ts
+const t: [string, number] = ['a', 1];
+
+function f(x: number) {
+    if (typeof x !== 'number') throw new Error('Error!!');
+}
+
+t.reverse(); // 実体は [1, 'a'] に
+
+f(t[1]); // 型: number / 実体: string
+// → "Error!!" (型エラーなし)
+```
+
+</div>
+
+<div>
+
+**✅ readonly — `tsc` がバグを事前検出**
+
+```ts
+const t: readonly [string, number] = ['a', 1];
+
+function f(x: number) {
+    if (typeof x !== 'number') throw new Error('Error!!');
+}
+
+const r = t.toReversed();
+// 戻り値型: (string | number)[]
+
+f(r[1]);
+// ❗ Argument of type 'string | number' is
+//    not assignable to parameter 'number'.
+```
+
+</div>
+
+</div>
+
+ほかにも、参照を保ったまま中身を書き換えて **React の再描画が起きない**などの典型バグも防げる。  
+→ **Readonly をデフォルト**にする規約を、codemod でリポジトリ全体に一括適用する価値がある。
+
+<span class="small">参考: [TypeScript Issue #52375](https://github.com/microsoft/TypeScript/issues/52375)</span>
+
+---
+
+<!-- _class: compact -->
+
+# 7.2 規模感と「LLM 効きにくさ」の正直な話
 
 | 区分                                  | 行数         |
 | ------------------------------------- | ------------ |
@@ -437,15 +493,17 @@ type User = Readonly<{
 
 <br>
 
-**この codemod は LLM 駆動 100% では収束しなかった**。理由（推察）：
+**この codemod は（少なくとも1年前当時の） LLM 駆動 100% では上手く実装できなかった**。
 
-- `ts-morph` の API 表面が広く、ノードごとに **意味論を伴う判断**が連鎖（parens を残す？ `DeepReadonly` で包む？ 中で `readonly` に落とす？）
+理由（推察）：
+
+- `ts-morph` の API 表面が広く、ノードごとに **意味論を伴う判断**が相互再帰で連鎖（括弧を残す？ `Readonly` で包む？ 中で `readonly` に落とす？）
 - **union / intersection / tuple / generic** にまたがる不変条件が多く、リグレッションを起こしやすい
 - ESLint のような「**ノードに対する独立検査 + 自動修正**」という疎結合単位に分解できない（`ReadonlyContext` で状態を持ち回す）
 
 ---
 
-# 7.2 教訓 — タスクごとの「LLM の効きやすさ」
+# 7.3 教訓 — タスクごとの「LLM の効きやすさ」
 
 <div class="two-col">
 
@@ -476,7 +534,7 @@ type User = Readonly<{
 
 <br>
 
-> **投資する順序**：まず **lint plugin を量で増やす**。codemod は「**骨格は人間 / テストケースは LLM**」のハイブリッドが現実解。
+> **投資する順序**：まず **lint plugin を量で増やす**。 複雑な codemod は「**本体は人間 / テストケースは LLM**」のハイブリッドが現実解かも。
 > codemod 実装本体は手で書いたが、**テスト 3,959 行の網羅は LLM で大量生成**できた。
 
 ---
@@ -535,7 +593,7 @@ type User = Readonly<{
 
 <br>
 
-<span class="accent">→ 今日から：レビューで 2 回同じことを言ったら 3 回目はルールにする。</span>
+<span class="accent">→ レビューで 2 回同じことを言ったら 3 回目はルールにする。</span>
 
 ---
 
