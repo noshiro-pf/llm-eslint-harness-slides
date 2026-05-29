@@ -41,6 +41,8 @@ style: |
       color: #f8fafc;
       border-bottom: none;
     }
+    section.section-break a { color: #93c5fd; }
+    section.section-break code { background: #1e293b; color: #e2e8f0; }
     section.compact { font-size: 22px; padding: 40px 60px; }
     section.compact pre { font-size: 0.72em; line-height: 1.35; padding: 12px; }
     section.compact table { font-size: 0.78em; }
@@ -250,7 +252,7 @@ export const myRule: Rule.RuleModule = {
 
 ## リポジトリ専用ローカル plugin
 
-`AutowareEvaluationDashboard/configs/eslint/plugins/`
+[`AutowareEvaluationDashboard/configs/eslint/plugins/`](https://github.com/tier4/AutowareEvaluationDashboard/tree/trunk/configs/eslint/plugins)
 
 ---
 
@@ -323,7 +325,7 @@ import { Bar } from '~/components/shared';
 
 ## コーディングスタイル系の汎用ルール
 
-`eslint-config-typed/src/plugins/react-coding-style/`
+[`eslint-config-typed/src/plugins/react-coding-style/`](https://github.com/noshiro-pf/eslint-config-typed/tree/main/src/plugins/react-coding-style)
 
 ---
 
@@ -390,13 +392,13 @@ MyComponent.displayName = 'MyComponent';
 
 ## LLM が手こずった例：codemod
 
-`noshiro-pf/ts-codemod-lib/.../convert-to-readonly.mts`
+[`ts-codemod-lib/.../convert-to-readonly.mts`](https://github.com/noshiro-pf/ts-codemod-lib/blob/main/src/functions/ast-transformers/convert-to-readonly.mts)
 
 ---
 
 <!-- _class: compact -->
 
-# 7. `convert-to-readonly` codemod とは
+# 7. `convert-to-readonly` codemod
 
 - TypeScript の型定義中の **mutable 型を Readonly 系に自動変換** する `ts-morph` ベース transformer。
 
