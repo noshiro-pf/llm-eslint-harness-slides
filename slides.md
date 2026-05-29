@@ -390,6 +390,8 @@ MyComponent.displayName = "MyComponent";
 
 ---
 
+<!-- _class: compact -->
+
 # 7. `convert-to-readonly` codemod とは
 
 - TypeScript の型定義中の **mutable 型を Readonly 系に自動変換** する `ts-morph` ベース transformer。
