@@ -3,8 +3,8 @@ marp: true
 theme: default
 paginate: true
 size: 16:9
-header: 'LLM × ESLint — ハーネスエンジニアリング'
-footer: 'Tier IV / noshiro-pf'
+header: "LLM × ESLint — ハーネスエンジニアリング"
+footer: "Tier IV / noshiro-pf"
 style: |
   section {
     font-size: 26px;
@@ -28,6 +28,9 @@ style: |
   }
   section.title a { color: #93c5fd; }
   section.title .small { color: #cbd5e1; }
+  section.title strong { color: #fbbf24; }
+  section.title code { background: #1e293b; color: #e2e8f0; }
+  section.title .refs li { color: #cbd5e1; font-size: 0.88em; line-height: 1.6; }
   section.section-break {
     background: #0f172a;
     color: #f8fafc;
@@ -71,14 +74,17 @@ style: |
   .token.keyword { color: #66d9ef; font-style: italic; }
   .token.regex, .token.important { color: #fd971f; }
   .token.italic { font-style: italic; }
-  /* highlight.js fallback (marp-core uses highlight.js via marp-core@4) */
+  /* highlight.js (marp-core uses highlight.js) — Monokai */
   .hljs-comment, .hljs-quote { color: #75715e; font-style: italic; }
-  .hljs-keyword, .hljs-selector-tag, .hljs-built_in, .hljs-name, .hljs-tag { color: #f92672; }
-  .hljs-string, .hljs-title, .hljs-section, .hljs-attribute, .hljs-literal, .hljs-template-tag, .hljs-template-variable, .hljs-type, .hljs-addition { color: #e6db74; }
-  .hljs-number, .hljs-symbol, .hljs-bullet, .hljs-link, .hljs-meta { color: #ae81ff; }
-  .hljs-class .hljs-title, .hljs-function .hljs-title, .hljs-title.function_ { color: #a6e22e; }
-  .hljs-attr, .hljs-variable, .hljs-regexp, .hljs-deletion { color: #fd971f; }
-  .hljs-params { color: #fd971f; font-style: italic; }
+  .hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-tag, .hljs-name { color: #f92672; }
+  .hljs-built_in, .hljs-type, .hljs-title.class_, .hljs-class .hljs-title { color: #66d9ef; font-style: italic; }
+  .hljs-string, .hljs-template-string, .hljs-regexp { color: #e6db74; }
+  .hljs-number, .hljs-symbol, .hljs-meta, .hljs-link { color: #ae81ff; }
+  .hljs-title, .hljs-section, .hljs-title.function_, .hljs-function .hljs-title { color: #a6e22e; }
+  .hljs-attr, .hljs-property { color: #f8f8f2; }
+  .hljs-attribute, .hljs-addition { color: #a6e22e; }
+  .hljs-params, .hljs-variable { color: #fd971f; font-style: italic; }
+  .hljs-deletion { color: #f92672; }
   table { font-size: 0.85em; border-collapse: collapse; }
   th { background: #1e3a8a; color: #fff; padding: 8px 12px; }
   td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; }
@@ -91,6 +97,7 @@ style: |
 <!-- _class: title -->
 
 # LLM × ESLint
+
 ## ハーネスエンジニアリングで AI 出力精度を底上げする
 
 <br>
@@ -109,7 +116,7 @@ LLM 駆動開発のスケーラビリティ
 1. **LLM への自然言語指示は揮発する**。CLAUDE.md やプロンプトに規約を書き続けるのは持続しない。
 2. 規律は **lint ルール** に焼き込んで、LLM を**エラー駆動**で動かす。
 3. **ESLint は JS/TS でカスタムルールが書ける** → LLM 時代に強い。Biome は plugin 拡張不在で弱い。**oxlint は 2026/03 に ESLint 互換の JS plugins alpha 公開**で有力候補に。
-4. **タスクごとに LLM の効きやすさは違う**：lint plugin は手動 0 / codemod は骨格人間 + テスト LLM のハイブリッドが現実解。
+4. **タスクごとに LLM の効きやすさは違う**：lint plugin は手動 0 / 複雑な codemod 実装は人間が本体実装 + テストコード生成 LLM のハイブリッドが現実解。
 
 ---
 
@@ -124,7 +131,7 @@ LLM 駆動開発のスケーラビリティ
 <br>
 
 > **ふんわりした規律は LLM 駆動のスケールに耐えない。**
-> 規律は **機械可読な形 = lint ルール** に落とせ。
+> 規律は **機械可読な形 = lint ルール** に落とすべき。
 
 ---
 
@@ -160,7 +167,7 @@ LLM 駆動開発のスケーラビリティ
   → 残エラーを LLM に渡す
   → tsc / vitest
   → 人間レビュー
-     (設計 + 意図のみ)
+     （設計 + 意図のみ）
 ```
 
 機械でできる検査は機械にやらせる。
@@ -183,10 +190,12 @@ LLM 駆動開発のスケーラビリティ
 ```ts
 export const myRule: Rule.RuleModule = {
   meta: {
-    type: 'problem',
-    fixable: 'code',
-    messages: { violate: '...' },
-    schema: [/* JSON Schema for options */],
+    type: "problem",
+    fixable: "code",
+    messages: { violate: "..." },
+    schema: [
+      /* JSON Schema for options */
+    ],
   },
   create(context) {
     return {
@@ -204,11 +213,11 @@ export const myRule: Rule.RuleModule = {
 
 # 4. なぜ ESLint なのか — 3 ツール比較
 
-| ツール     | カスタムルール拡張 | 速度 | LLM 時代の評価 |
-|---|---|---|---|
-| **ESLint** | JS/TS で plugin。AST + scope + 型情報フルアクセス | 標準 | ◎ 既存資産最大。LLM 即生成 |
-| **Biome** | プラグイン機構なし（GritQL ベース限定） | 速い | △ 速度は魅力。**規約を機械化できないのが致命的** |
-| **oxlint** | **2026/03 に JS plugins alpha**。ESLint v9+ API と **99.5%+ 互換**。tsgolint で型情報も | **非常に速い** | ◎ ESLint 置き換え候補。資産を保てる |
+| ツール     | カスタムルール拡張                                                                      | 速度           | LLM 時代の評価                                   |
+| ---------- | --------------------------------------------------------------------------------------- | -------------- | ------------------------------------------------ |
+| **ESLint** | JS/TS で plugin。AST + scope + 型情報フルアクセス                                       | 標準           | ◎ 既存資産最大。LLM 即生成                       |
+| **Biome**  | プラグイン機構なし（GritQL ベース限定）                                                 | 速い           | △ 速度は魅力。**規約を機械化できないのが致命的** |
+| **oxlint** | **2026/03 に JS plugins alpha**。ESLint v9+ API と **99.5%+ 互換**。tsgolint で型情報も | **非常に速い** | ◎ ESLint 置き換え候補。資産を保てる              |
 
 <br>
 
@@ -238,6 +247,7 @@ export const myRule: Rule.RuleModule = {
 <!-- _class: section-break -->
 
 # 事例 A
+
 ## リポジトリ専用ローカル plugin
 
 `AutowareEvaluationDashboard/configs/eslint/plugins/`
@@ -255,8 +265,8 @@ export const myRule: Rule.RuleModule = {
 **Before**（LLM がよく書く）
 
 ```ts
-import { Foo } from '../../../components/shared';
-import { Bar } from '../../shared/utils';
+import { Foo } from "../../../components/shared";
+import { Bar } from "../../shared/utils";
 ```
 
 </div>
@@ -266,8 +276,8 @@ import { Bar } from '../../shared/utils';
 **After**（`eslint --fix` 後）
 
 ```ts
-import { Foo } from '~/components/shared';
-import { Bar } from '~/components/shared';
+import { Foo } from "~/components/shared";
+import { Bar } from "~/components/shared";
 ```
 
 </div>
@@ -286,14 +296,14 @@ import { Bar } from '~/components/shared';
 
 ```ts
 layers: [
-  'src/utils',        // ← 最も低層 (どこからも依存される)
-  'src/core',
-  'src/constants',
+  "src/utils", // ← 最も低層 (どこからも依存される)
+  "src/core",
+  "src/constants",
   // ...
-  'src/components/common',
-  'src/components/shared',
-  'src/components',   // ← 最も高層
-]
+  "src/components/common",
+  "src/components/shared",
+  "src/components", // ← 最も高層
+];
 ```
 
 - 各ファイルは **prefix が最も長く一致するレイヤー**に所属。その index で大小比較。
@@ -308,6 +318,7 @@ layers: [
 <!-- _class: section-break -->
 
 # 事例 B
+
 ## コーディングスタイル系の汎用ルール
 
 `eslint-config-typed/src/plugins/react-coding-style/`
@@ -318,17 +329,17 @@ layers: [
 
 「**型では表現しきれないが、チームで統一したい記法**」を 1 本ずつ AST ルール化。
 
-| ルール | 何を縛るか |
-|---|---|
-| `component-name` | コンポーネント変数名 |
-| `component-var-type-annotation` | 変数宣言の型注釈位置 |
-| `display-name` | `React.memo` の `displayName` 必須化 |
-| `props-type-annotation-style` | `Props` 型を `Readonly<{...}>` で書く |
-| `react-memo-props-argument-name` | `React.memo` の引数名 |
-| `react-memo-type-parameter` | `React.memo<Props>` の型パラメータ強制 |
-| `import-style` | `import * as React from 'react'` 形式に統一 |
-| `use-memo-hook-style` | `useMemo` の宣言スタイル統一 |
-| `ban-use-imperative-handle-hook` | `useImperativeHandle` の禁止 |
+| ルール                           | 何を縛るか                                  |
+| -------------------------------- | ------------------------------------------- |
+| `component-name`                 | コンポーネント変数名                        |
+| `component-var-type-annotation`  | 変数宣言の型注釈位置                        |
+| `display-name`                   | `React.memo` の `displayName` 必須化        |
+| `props-type-annotation-style`    | `Props` 型を `Readonly<{...}>` で書く       |
+| `react-memo-props-argument-name` | `React.memo` の引数名                       |
+| `react-memo-type-parameter`      | `React.memo<Props>` の型パラメータ強制      |
+| `import-style`                   | `import * as React from 'react'` 形式に統一 |
+| `use-memo-hook-style`            | `useMemo` の宣言スタイル統一                |
+| `ban-use-imperative-handle-hook` | `useImperativeHandle` の禁止                |
 
 各ルールに `.test.mts` 同居 → **ルール自体に TDD が回せる**。
 
@@ -343,9 +354,7 @@ layers: [
 **Bad**
 
 ```tsx
-const MyComponent = React.memo(
-  () => <div>Hello</div>
-);
+const MyComponent = React.memo(() => <div>Hello</div>);
 ```
 
 DevTools で `Anonymous` 扱いされてデバッグ困難。
@@ -357,10 +366,8 @@ DevTools で `Anonymous` 扱いされてデバッグ困難。
 **Good**
 
 ```tsx
-const MyComponent = React.memo(
-  () => <div>Hello</div>
-);
-MyComponent.displayName = 'MyComponent';
+const MyComponent = React.memo(() => <div>Hello</div>);
+MyComponent.displayName = "MyComponent";
 ```
 
 </div>
@@ -376,6 +383,7 @@ MyComponent.displayName = 'MyComponent';
 <!-- _class: section-break -->
 
 # 事例 C
+
 ## LLM が手こずった例：codemod
 
 `noshiro-pf/ts-codemod-lib/.../convert-to-readonly.mts`
@@ -407,13 +415,15 @@ type User = Readonly<{
 
 ---
 
+<!-- _class: compact -->
+
 # 7.1 規模感と「LLM 効きにくさ」の正直な話
 
-| 区分 | 行数 |
-|---|---|
-| 本体 `convert-to-readonly.mts` | **1,482 行** |
+| 区分                                  | 行数         |
+| ------------------------------------- | ------------ |
+| 本体 `convert-to-readonly.mts`        | **1,482 行** |
 | テスト `convert-to-readonly.test.mts` | **3,959 行** |
-| helpers | 約 250 行 |
+| helpers                               | 約 250 行    |
 
 比較：§5 の ESLint plugin は **170〜200 行 / 本、LLM 駆動でほぼ手動 0**。
 
@@ -529,11 +539,12 @@ type User = Readonly<{
 
 <br>
 
-参考リポジトリ
-<span class="small">
+**参考リポジトリ**
+
+<div class="refs">
 
 - `AutowareEvaluationDashboard/configs/eslint/plugins/`
 - `noshiro-pf/eslint-config-typed/src/plugins/react-coding-style/`
 - `noshiro-pf/ts-codemod-lib/src/functions/ast-transformers/`
 
-</span>
+</div>
