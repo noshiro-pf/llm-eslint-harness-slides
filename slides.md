@@ -3,95 +3,95 @@ marp: true
 theme: default
 paginate: true
 size: 16:9
-header: "LLM × ESLint — ハーネスエンジニアリング"
-footer: "Tier IV / noshiro-pf"
+header: 'LLM × ESLint — ハーネスエンジニアリング'
+footer: 'Tier IV / noshiro-pf'
 style: |
-  section {
-    font-size: 26px;
-    padding: 60px 70px;
-  }
-  section.title {
-    background: linear-gradient(135deg, #1f2937 0%, #0f172a 100%);
-    color: #f8fafc;
-    text-align: left;
-    padding: 100px 90px;
-  }
-  section.title h1 {
-    font-size: 56px;
-    color: #f8fafc;
-    border-bottom: none;
-  }
-  section.title h2 {
-    font-size: 28px;
-    color: #94a3b8;
-    font-weight: 400;
-  }
-  section.title a { color: #93c5fd; }
-  section.title .small { color: #cbd5e1; }
-  section.title strong { color: #fbbf24; }
-  section.title code { background: #1e293b; color: #e2e8f0; }
-  section.title .refs li { color: #cbd5e1; font-size: 0.88em; line-height: 1.6; }
-  section.section-break {
-    background: #0f172a;
-    color: #f8fafc;
-    text-align: center;
-  }
-  section.section-break h1 {
-    font-size: 64px;
-    color: #f8fafc;
-    border-bottom: none;
-  }
-  section.compact { font-size: 22px; padding: 40px 60px; }
-  section.compact pre { font-size: 0.72em; line-height: 1.35; padding: 12px; }
-  section.compact table { font-size: 0.78em; }
-  section.compact h1 { font-size: 30px; margin-bottom: 16px; }
-  section.compact p, section.compact li { line-height: 1.45; }
-  h1 { color: #1e3a8a; border-bottom: 2px solid #1e3a8a; padding-bottom: 8px; }
-  h2 { color: #1e3a8a; }
-  strong { color: #b91c1c; }
-  /* inline code: light bg in light slides */
-  code { background: #f1f5f9; color: #0f172a; padding: 2px 6px; border-radius: 4px; font-size: 0.92em; }
-  /* code blocks: monokai-ish */
-  pre {
-    background: #272822;
-    color: #f8f8f2;
-    border-radius: 8px;
-    padding: 16px;
-    font-size: 0.78em;
-    line-height: 1.5;
-  }
-  pre code { background: transparent; color: #f8f8f2; padding: 0; }
-  /* Prism token colors (monokai) */
-  .hljs, code[class*="language-"], pre[class*="language-"] { background: #272822; color: #f8f8f2; }
-  .token.comment, .token.prolog, .token.doctype, .token.cdata { color: #75715e; font-style: italic; }
-  .token.punctuation { color: #f8f8f2; }
-  .token.namespace { opacity: 0.7; }
-  .token.property, .token.tag, .token.constant, .token.symbol, .token.deleted { color: #f92672; }
-  .token.boolean, .token.number { color: #ae81ff; }
-  .token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.inserted { color: #e6db74; }
-  .token.operator, .token.entity, .token.url, .token.variable { color: #f8f8f2; }
-  .token.atrule, .token.attr-value, .token.function, .token.class-name { color: #a6e22e; }
-  .token.keyword { color: #66d9ef; font-style: italic; }
-  .token.regex, .token.important { color: #fd971f; }
-  .token.italic { font-style: italic; }
-  /* highlight.js (marp-core uses highlight.js) — Monokai */
-  .hljs-comment, .hljs-quote { color: #75715e; font-style: italic; }
-  .hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-tag, .hljs-name { color: #f92672; }
-  .hljs-built_in, .hljs-type, .hljs-title.class_, .hljs-class .hljs-title { color: #66d9ef; font-style: italic; }
-  .hljs-string, .hljs-template-string, .hljs-regexp { color: #e6db74; }
-  .hljs-number, .hljs-symbol, .hljs-meta, .hljs-link { color: #ae81ff; }
-  .hljs-title, .hljs-section, .hljs-title.function_, .hljs-function .hljs-title { color: #a6e22e; }
-  .hljs-attr, .hljs-property { color: #f8f8f2; }
-  .hljs-attribute, .hljs-addition { color: #a6e22e; }
-  .hljs-params, .hljs-variable { color: #fd971f; font-style: italic; }
-  .hljs-deletion { color: #f92672; }
-  table { font-size: 0.85em; border-collapse: collapse; }
-  th { background: #1e3a8a; color: #fff; padding: 8px 12px; }
-  td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; }
-  blockquote { border-left: 4px solid #1e3a8a; background: #eff6ff; padding: 12px 18px; color: #334155; }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-  .small { font-size: 0.82em; color: #475569; }
-  .accent { color: #b91c1c; font-weight: bold; }
+    section {
+      font-size: 26px;
+      padding: 60px 70px;
+    }
+    section.title {
+      background: linear-gradient(135deg, #1f2937 0%, #0f172a 100%);
+      color: #f8fafc;
+      text-align: left;
+      padding: 100px 90px;
+    }
+    section.title h1 {
+      font-size: 56px;
+      color: #f8fafc;
+      border-bottom: none;
+    }
+    section.title h2 {
+      font-size: 28px;
+      color: #94a3b8;
+      font-weight: 400;
+    }
+    section.title a { color: #93c5fd; }
+    section.title .small { color: #cbd5e1; }
+    section.title strong { color: #fbbf24; }
+    section.title code { background: #1e293b; color: #e2e8f0; }
+    section.title .refs li { color: #cbd5e1; font-size: 0.88em; line-height: 1.6; }
+    section.section-break {
+      background: #0f172a;
+      color: #f8fafc;
+      text-align: center;
+    }
+    section.section-break h1 {
+      font-size: 64px;
+      color: #f8fafc;
+      border-bottom: none;
+    }
+    section.compact { font-size: 22px; padding: 40px 60px; }
+    section.compact pre { font-size: 0.72em; line-height: 1.35; padding: 12px; }
+    section.compact table { font-size: 0.78em; }
+    section.compact h1 { font-size: 30px; margin-bottom: 16px; }
+    section.compact p, section.compact li { line-height: 1.45; }
+    h1 { color: #1e3a8a; border-bottom: 2px solid #1e3a8a; padding-bottom: 8px; }
+    h2 { color: #1e3a8a; }
+    strong { color: #b91c1c; }
+    /* inline code: light bg in light slides */
+    code { background: #f1f5f9; color: #0f172a; padding: 2px 6px; border-radius: 4px; font-size: 0.92em; }
+    /* code blocks: monokai-ish */
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 0.78em;
+      line-height: 1.5;
+    }
+    pre code { background: transparent; color: #f8f8f2; padding: 0; }
+    /* Prism token colors (monokai) */
+    .hljs, code[class*="language-"], pre[class*="language-"] { background: #272822; color: #f8f8f2; }
+    .token.comment, .token.prolog, .token.doctype, .token.cdata { color: #75715e; font-style: italic; }
+    .token.punctuation { color: #f8f8f2; }
+    .token.namespace { opacity: 0.7; }
+    .token.property, .token.tag, .token.constant, .token.symbol, .token.deleted { color: #f92672; }
+    .token.boolean, .token.number { color: #ae81ff; }
+    .token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.inserted { color: #e6db74; }
+    .token.operator, .token.entity, .token.url, .token.variable { color: #f8f8f2; }
+    .token.atrule, .token.attr-value, .token.function, .token.class-name { color: #a6e22e; }
+    .token.keyword { color: #66d9ef; font-style: italic; }
+    .token.regex, .token.important { color: #fd971f; }
+    .token.italic { font-style: italic; }
+    /* highlight.js (marp-core uses highlight.js) — Monokai */
+    .hljs-comment, .hljs-quote { color: #75715e; font-style: italic; }
+    .hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-tag, .hljs-name { color: #f92672; }
+    .hljs-built_in, .hljs-type, .hljs-title.class_, .hljs-class .hljs-title { color: #66d9ef; font-style: italic; }
+    .hljs-string, .hljs-template-string, .hljs-regexp { color: #e6db74; }
+    .hljs-number, .hljs-symbol, .hljs-meta, .hljs-link { color: #ae81ff; }
+    .hljs-title, .hljs-section, .hljs-title.function_, .hljs-function .hljs-title { color: #a6e22e; }
+    .hljs-attr, .hljs-property { color: #f8f8f2; }
+    .hljs-attribute, .hljs-addition { color: #a6e22e; }
+    .hljs-params, .hljs-variable { color: #fd971f; font-style: italic; }
+    .hljs-deletion { color: #f92672; }
+    table { font-size: 0.85em; border-collapse: collapse; }
+    th { background: #1e3a8a; color: #fff; padding: 8px 12px; }
+    td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; }
+    blockquote { border-left: 4px solid #1e3a8a; background: #eff6ff; padding: 12px 18px; color: #334155; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .small { font-size: 0.82em; color: #475569; }
+    .accent { color: #b91c1c; font-weight: bold; }
 ---
 
 <!-- _class: title -->
@@ -124,8 +124,8 @@ LLM 駆動開発のスケーラビリティ
 
 - 「こう書いて / これは禁止」は **その会話だけ** で効く。次のセッション、別の人のセッションでは消える。
 - CLAUDE.md / agents.md に規約を積んでも：
-  - 量が増えるほど **追従精度が落ちる**
-  - **守ったかを機械検証する手段がない** ← これが本質
+    - 量が増えるほど **追従精度が落ちる**
+    - **守ったかを機械検証する手段がない** ← これが本質
 - 結果：レビューワーが毎回同じ指摘 → 時間とトークンを溶かす。
 
 <br>
@@ -189,21 +189,21 @@ LLM 駆動開発のスケーラビリティ
 
 ```ts
 export const myRule: Rule.RuleModule = {
-  meta: {
-    type: "problem",
-    fixable: "code",
-    messages: { violate: "..." },
-    schema: [
-      /* JSON Schema for options */
-    ],
-  },
-  create(context) {
-    return {
-      ImportDeclaration(node) {
-        // node を検査して context.report({ node, messageId, fix }) を呼ぶ
-      },
-    };
-  },
+    meta: {
+        type: 'problem',
+        fixable: 'code',
+        messages: { violate: '...' },
+        schema: [
+            /* JSON Schema for options */
+        ],
+    },
+    create(context) {
+        return {
+            ImportDeclaration(node) {
+                // node を検査して context.report({ node, messageId, fix }) を呼ぶ
+            },
+        };
+    },
 };
 ```
 
@@ -265,8 +265,8 @@ export const myRule: Rule.RuleModule = {
 **Before**（LLM がよく書く）
 
 ```ts
-import { Foo } from "../../../components/shared";
-import { Bar } from "../../shared/utils";
+import { Foo } from '../../../components/shared';
+import { Bar } from '../../shared/utils';
 ```
 
 </div>
@@ -276,8 +276,8 @@ import { Bar } from "../../shared/utils";
 **After**（`eslint --fix` 後）
 
 ```ts
-import { Foo } from "~/components/shared";
-import { Bar } from "~/components/shared";
+import { Foo } from '~/components/shared';
+import { Bar } from '~/components/shared';
 ```
 
 </div>
@@ -296,13 +296,13 @@ import { Bar } from "~/components/shared";
 
 ```ts
 layers: [
-  "src/utils", // ← 最も低層 (どこからも依存される)
-  "src/core",
-  "src/constants",
-  // ...
-  "src/components/common",
-  "src/components/shared",
-  "src/components", // ← 最も高層
+    'src/utils', // ← 最も低層 (どこからも依存される)
+    'src/core',
+    'src/constants',
+    // ...
+    'src/components/common',
+    'src/components/shared',
+    'src/components', // ← 最も高層
 ];
 ```
 
@@ -324,6 +324,8 @@ layers: [
 `eslint-config-typed/src/plugins/react-coding-style/`
 
 ---
+
+<!-- _class: compact -->
 
 # 6. `react-coding-style` ルール群（9 本）
 
@@ -367,7 +369,7 @@ DevTools で `Anonymous` 扱いされてデバッグ困難。
 
 ```tsx
 const MyComponent = React.memo(() => <div>Hello</div>);
-MyComponent.displayName = "MyComponent";
+MyComponent.displayName = 'MyComponent';
 ```
 
 </div>
@@ -399,16 +401,16 @@ MyComponent.displayName = "MyComponent";
 ```ts
 // Before
 type User = {
-  tags: string[];
-  position: [number, number];
-  config: { retries: number };
+    tags: string[];
+    position: [number, number];
+    config: { retries: number };
 };
 
 // After (codemod 適用後)
 type User = Readonly<{
-  tags: readonly string[];
-  position: readonly [number, number];
-  config: Readonly<{ retries: number }>;
+    tags: readonly string[];
+    position: readonly [number, number];
+    config: Readonly<{ retries: number }>;
 }>;
 ```
 
@@ -506,25 +508,25 @@ type User = Readonly<{
 
 - 社内シナリオ DSL（YAML 等）の静的検証ツール
 - 旧 API → 新 API の自動移行 codemod
-- リポジトリ横断の禁止 import スキャナ
-- protobuf スキーマの後方互換チェッカ
+- リポジトリ横断の禁止 import スキャナー
+- protobuf スキーマの後方互換チェッカー
 
 <br>
 
 > **静的検証の自前増殖力こそが、LLM 駆動開発のスケーラビリティを決める。**
-> ただし書き換え系（codemod）はまだ人間の手が要る — 配分は「lint で量 / codemod は質」。
+> ただし codemod 実装では人間の手が要るケースも — 配分は「lint で量 / codemod は質」。
 
 ---
 
 # 10. まとめ
 
-1. **LLM への指示は揮発する。規律は lint に焼き込め。**
+1. **LLM への指示は揮発する。規律は lint に焼き込む。**
 2. **ESLint は plugin 拡張があるおかげで LLM 時代に強い。**
-   Biome は弱い。**oxlint は 2026/03 で現実解**になった。
+   Biomeは微妙。**oxlint は 2026/03 で現実解**になった。
 3. **ルール実装は LLM にやらせれば限界費用ゼロ。**
    「指示を増やす」より「ハーネスを増やす」。
-4. **タスクの性質を見極めよ**：lint plugin は LLM 駆動 100%、
-   codemod は骨格人間 + テスト LLM のハイブリッド。
+4. **タスクの性質を見極める**：lint plugin は LLM 駆動 100%、
+   複雑な codemod は人間が実装 + テストケース追加は LLM のハイブリッド。
    **テスト生成はどのタスクでも LLM が効く。**
 
 <br>
