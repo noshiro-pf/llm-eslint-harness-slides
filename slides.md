@@ -254,7 +254,34 @@ export const myRule: Rule.RuleModule = {
 
 ---
 
-# 5.1 `use-alias-import` (fixable)
+<!-- _class: compact -->
+
+# 5.1 `import-layer-order`
+
+**やること**：レイヤーを線形配列で宣言し、**逆方向（低層が高層に依存）を禁止**。
+
+```ts
+layers: [
+    'src/utils', // ← 最も低層 (どこからも依存される)
+    'src/constants',
+    'src/api',
+    'src/store',
+    'src/hooks',
+    'src/components/shared',
+    'src/components', // ← 最も高層
+];
+```
+
+- 各ファイルは **prefix が最も長く一致するレイヤー**に所属。その index で大小比較。
+- **なぜ必要**：LLM は雑に書くとレイヤー反転（例 utils → components）を混入させる。
+- **効用**：アーキテクチャ違反を **AI に書かせないハード制約**。
+- **規模感**：**約 200 行 TS**、`exemptFiles` で除外可能。
+
+> 「自然言語で何度も同じ指摘 → ルール 1 個書いて永久に黙らせる」典型例。
+
+---
+
+# 5.2 `use-alias-import` (fixable)
 
 **やること**：特定ディレクトリ配下を相対 import で参照していたら、**barrel 経由の alias に矯正**。
 
@@ -287,31 +314,6 @@ import { Bar } from '~/components/shared';
 - **なぜ必要**：LLM はパス構造を覚えていられず fragile な相対 import を生成。移動・リネームで壊れる。
 - **ポリシー**：`tsconfig` paths には barrel alias のみ登録。サブパスは禁止。
 - **規模感**：**約 170 行 TS**。LLM に仕様を渡せば 1 セッションで生成可能。
-
----
-
-# 5.2 `import-layer-order`
-
-**やること**：レイヤーを線形配列で宣言し、**逆方向（低層が高層に依存）を禁止**。
-
-```ts
-layers: [
-    'src/utils', // ← 最も低層 (どこからも依存される)
-    'src/core',
-    'src/constants',
-    // ...
-    'src/components/common',
-    'src/components/shared',
-    'src/components', // ← 最も高層
-];
-```
-
-- 各ファイルは **prefix が最も長く一致するレイヤー**に所属。その index で大小比較。
-- **なぜ必要**：LLM は雑に書くとレイヤー反転（utils → components）を混入させる。
-- **効用**：アーキテクチャ違反を **AI に書かせないハード制約**。
-- **規模感**：**約 200 行 TS**、`exemptFiles` で除外可能。
-
-> 「自然言語で何度も同じ指摘 → ルール 1 個書いて永久に黙らせる」典型例。
 
 ---
 
